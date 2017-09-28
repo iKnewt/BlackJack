@@ -11,12 +11,21 @@ struct Card {
 	char suit;
 };
 
+struct Hand
+{
+	string name;
+	vector<Card> hand;
+	int totalBlackJackValue = 0;
+	int cash = 100;
+	int bet = 0;
+};
+
 class Game
 {
 public:
-	static void game();
+	static void game(Card deck[]);
 	static void createDeck(Card deckCard[]);
-	static void printHand(vector<Card>, int handSize);
+	static void printHand(Hand current, int cardsDrawn);
 
 
 };
