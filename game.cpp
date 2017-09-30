@@ -2,9 +2,30 @@
 #include <time.h>
 #include <random>
 
+static const string CARD_NAMES[] = {
+	"Ace",
+	"Two",
+	"Three",
+	"Four",
+	"Five",
+	"Six",
+	"Seven",
+	"Eight",
+	"Nine",
+	"Ten",
+	"Jack",
+	"Queen",
+	"King",
+};
+
+static const string SUIT_NAMES[] = {
+	"Diamonds",
+	"Clubs",
+	"Hearts",
+	"Spades",
+};
 
 void Player::clearHand() {
-	//	hand.clear();
 	hand.resize(0);
 	totalBlackJackValue = 0;
 	bet = 0;
@@ -38,59 +59,24 @@ void Player::placeBet(const Player& otherPlayer) {
 
 void Player::printHand() { // prints a players hand to screen
 	cout << "\n\n\n" << " | " << name << " | " << cash << "$" << " | " << endl << endl;
-	cout << " | ";
 	for(int i = 0; i < cardsDrawn; i++) {
-		cout << hand[i].suit << hand[i].rank << " | ";
-		//	for(int i = 0; i < 3; i++) {
-		//		cout << "-------\n" <<
-		//				"|     |\n" <<
-		//				"|  " << hand[i].suit << "  |\n" <<
-		//				"|  " << hand[i].rank << "  |\n" <<
-		//				"|     |\n" <<
-		//				"-------\n\n";
+		cout << " | " << CARD_NAMES[hand[i].rank] << " of " << SUIT_NAMES[hand[i].suit] << endl;
 	}
 	cout << "\n Current total value: " << totalBlackJackValue;
 	cout << endl;
 }
 
-
-
-
-
 void Game::printBoard(Player house, Player player) {
 	house.printHand();
-	cout << "\n\n\n\n\n\n\n\n";
+	cout << "\n\n\n";
 	player.printHand();
 }
-
-
-
-
 
 void Game::createDeck(Card deckCard[]) { // creates a full deck of cards
 	for(int i = 0; i < 52;) { // loops
 		for(int suitInt = 0; suitInt < 4; suitInt++) {
-			char suit;
-
-			switch (suitInt) { // assigns the four different suits to the cards (clubs, diamonds, spades and hearts)
-				case 0:
-					suit = 'A';
-					break;
-				case 1:
-					suit = 'B';
-					break;
-				case 2:
-					suit = 'C';
-					break;
-				case 3:
-					suit = 'D';
-					break;
-				default:
-					break;
-			}
-
 			for(int rank = 1; rank < 14; rank++) { // there are 13 cards of each suit [Ace-King]
-				deckCard[i].suit = suit; // the current card is assigned a suit [A-D]
+				deckCard[i].suit = suitInt; // the current card is assigned a suit [0-3]
 				deckCard[i].rank = rank; // the current card is assigned a rank [1-13]
 				if(rank >= 10)
 					deckCard[i].blackjackValue = 10; // all face cards in blackjack have the value 10
@@ -114,10 +100,8 @@ void shuffle(Card deck[]) { // shuffels the positions of elements in an array (b
 	}
 }
 
-
 void houseTurn(Card deck[], Player* house, Player* player) {
 	cout << "\nhouse turn\n";
-
 
 	do {
 		if(house->totalBlackJackValue > 21) {
@@ -148,16 +132,10 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 }
 
 bool playerTurn(Card deck[], Player* house, Player* player) {
-	//	player->hand.push_back(deck[player->cardsDrawn]);
-	//	player->totalBlackJackValue = deck[player->cardsDrawn].blackjackValue;
-
-	//	player->cardsDrawn++;
-
 
 	do {
 		Game::printBoard(*house, *player);
 
-		//player.printHand();
 		cout << "\n\nWill you Hit or Stand? ";
 		string playerChoice = Tool::readLine();
 		playerChoice = Tool::toLower(playerChoice);
@@ -188,7 +166,6 @@ bool playerTurn(Card deck[], Player* house, Player* player) {
 		else
 			cout << "\nThat's not a valid move";
 	} while(player->totalBlackJackValue < 21);
-
 
 	if(player->totalBlackJackValue > 21) {
 		//player.printHand();

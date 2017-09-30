@@ -7,7 +7,7 @@
 struct Card {
 	int rank;
 	int blackjackValue;
-	char suit;
+	int suit;
 };
 
 class Player {
