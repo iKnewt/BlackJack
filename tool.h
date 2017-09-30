@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 class Tool
 {
 public:
@@ -14,6 +13,7 @@ public:
 	static bool tryParseInt(string input, int* out);
 	static bool tryReadInt(int* out);
 	static int randomNumber(int min, int max);
+	static void pressToContinue();
 };
 
 #endif // TOOL_H

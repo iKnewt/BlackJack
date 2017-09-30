@@ -22,17 +22,13 @@ int main()
 
 			"Good luck!\n\n\n";
 
-	Card deck[51];
+	Card deck[52];
 	Game::createDeck(deck);
 
+	Tool::pressToContinue();
+
+
 	Game::game(deck);
-
-//	for(int n=0; n<40; ++n) {
-//		int num = Tool::randomNumber(0,51);
-//		cout << num << "  ";
-//	}
-
-	//	Game::game();
 
 	return 0;
 }

@@ -4,30 +4,31 @@
 #include "tool.h"
 #include <vector>
 
-
 struct Card {
 	int rank;
 	int blackjackValue;
 	char suit;
 };
 
-struct Hand
-{
+class Player {
+public:
+	void printHand();
+	void clearHand();
+	void placeBet(Player& otherPlayer);
+
 	string name;
 	vector<Card> hand;
 	int totalBlackJackValue = 0;
 	int cash = 100;
 	int bet = 0;
+	int cardsDrawn = 0;
 };
 
-class Game
-{
+class Game {
 public:
 	static void game(Card deck[]);
 	static void createDeck(Card deckCard[]);
-	static void printHand(Hand current, int cardsDrawn);
-
-
+	static void printBoard(Player player, Player house);
 };
 
 #endif // GAME_H
