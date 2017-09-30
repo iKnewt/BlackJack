@@ -28,6 +28,6 @@ string Tool::readLine() {
 }
 
 void Tool::pressToContinue() {
-	cout << "\n\nPress any key to continue";
+	cout << "\n\nPress enter to continue";
 	Tool::readLine();
 }

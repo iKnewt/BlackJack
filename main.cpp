@@ -3,8 +3,7 @@
 using namespace std;
 
 
-int main()
-{
+int main() {
 	cout << "***** BlackJack *****\n\n";
 
 	cout << "Hello, and welcome to this stripped down game of Blackjack.\n\n" <<

@@ -14,7 +14,7 @@ class Player {
 public:
 	void printHand();
 	void clearHand();
-	void placeBet(Player& otherPlayer);
+	void placeBet(const Player& otherPlayer);
 
 	string name;
 	vector<Card> hand;
@@ -28,7 +28,7 @@ class Game {
 public:
 	static void game(Card deck[]);
 	static void createDeck(Card deckCard[]);
-	static void printBoard(Player player, Player house);
+	static void printBoard(Player house, Player player);
 };
 
 #endif // GAME_H

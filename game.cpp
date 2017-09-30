@@ -11,7 +11,7 @@ void Player::clearHand() {
 	cardsDrawn = 0;
 }
 
-void Player::placeBet(Player& otherPlayer) {
+void Player::placeBet(const Player& otherPlayer) {
 	while(true) {
 		cout << "\nWhat will you bet [min 10$]? ";
 		if (!Tool::tryReadInt(&bet)){ // reads a userInput, returns true if it's an Int and saves that int in playerBet
@@ -57,12 +57,9 @@ void Player::printHand() { // prints a players hand to screen
 
 
 
-void Game::printBoard(Player player, Player house) {
-
+void Game::printBoard(Player house, Player player) {
 	house.printHand();
-
 	cout << "\n\n\n\n\n\n\n\n";
-
 	player.printHand();
 }
 
@@ -145,9 +142,65 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 			house->totalBlackJackValue += deck[house->cardsDrawn + player->cardsDrawn].blackjackValue;
 
 		//house.printHand();
-		Game::printBoard(*player, *house);
+		Game::printBoard(*house, *player);
 		Tool::pressToContinue();
 	} while(house->totalBlackJackValue < player->totalBlackJackValue);
+}
+
+bool playerTurn(Card deck[], Player* house, Player* player) {
+	//	player->hand.push_back(deck[player->cardsDrawn]);
+	//	player->totalBlackJackValue = deck[player->cardsDrawn].blackjackValue;
+
+	//	player->cardsDrawn++;
+
+
+	do {
+		Game::printBoard(*house, *player);
+
+		//player.printHand();
+		cout << "\n\nWill you Hit or Stand? ";
+		string playerChoice = Tool::readLine();
+		playerChoice = Tool::toLower(playerChoice);
+
+		if(playerChoice == "hit") {
+			player->hand.push_back(deck[player->cardsDrawn]);
+			if(deck[player->cardsDrawn].rank == 1) {
+				int aceValue;
+				while (true) {
+					cout << "\nYou drew an ace! would you like its value to be 1 or 11? ";
+					if (!Tool::tryReadInt(&aceValue))
+						cout << "\nThat's not a number\n";
+					else if(aceValue != 1 && aceValue != 11)
+						cout << "\nYou can't put that value\n";
+					else {
+						player->totalBlackJackValue += aceValue;
+						break;
+					}
+				}
+			}
+			else {
+				player->totalBlackJackValue += deck[player->cardsDrawn].blackjackValue;
+			}
+			player->cardsDrawn++;
+		}
+		else if(playerChoice == "stand")
+			break;
+		else
+			cout << "\nThat's not a valid move";
+	} while(player->totalBlackJackValue < 21);
+
+
+	if(player->totalBlackJackValue > 21) {
+		//player.printHand();
+		Game::printBoard(*house, *player);
+		cout << "\nYou busted and have to hand the house the minimal bet of 10$\n";
+		player->cash -= 10;
+		house->cash += 10;
+		Tool::pressToContinue();
+		return true;
+		//		continue;
+	}
+	return false;
 }
 
 void Game::game(Card deck[]) {
@@ -158,13 +211,6 @@ void Game::game(Card deck[]) {
 	Player player;
 	player.name = "player";
 
-
-
-
-
-
-
-
 	while(true) {
 
 		player.clearHand();
@@ -172,72 +218,16 @@ void Game::game(Card deck[]) {
 
 		shuffle(deck);
 
-		player.hand.push_back(deck[player.cardsDrawn]);
-		player.totalBlackJackValue = deck[player.cardsDrawn].blackjackValue;
 
-		player.cardsDrawn++;
-
-
-
-		do {
-
-			Game::printBoard(player, house);
-
-
-
-
-			//player.printHand();
-			cout << "\n\nWill you Hit or Stand? ";
-			string playerChoice = Tool::readLine();
-			playerChoice = Tool::toLower(playerChoice);
-
-
-
-			if(playerChoice == "hit") {
-				player.hand.push_back(deck[player.cardsDrawn]);
-				if(deck[player.cardsDrawn].rank == 1) {
-					int aceValue;
-					while (true) {
-						cout << "\nYou drew an ace! would you like its value to be 1 or 11? ";
-						if (!Tool::tryReadInt(&aceValue))
-							cout << "\nThat's not a number\n";
-						else if(aceValue != 1 && aceValue != 11)
-							cout << "\nYou can't put that value\n";
-						else {
-							player.totalBlackJackValue += aceValue;
-							break;
-						}
-					}
-				}
-				else
-					player.totalBlackJackValue += deck[player.cardsDrawn].blackjackValue;
-				player.cardsDrawn++;
-			}
-			else if(playerChoice == "stand")
-				break;
-			else
-				cout << "\nThat's not a valid move";
-		} while(player.totalBlackJackValue < 21);
-
-
-		if(player.totalBlackJackValue > 21) {
-			//player.printHand();
-			Game::printBoard(player,house);
-			cout << "\nYou busted and have to hand the house the minimal bet of 10$\n";
-			player.cash -= 10;
-			house.cash += 10;
-			Tool::pressToContinue();
+		if(playerTurn(deck, &house, &player))
 			continue;
-		}
-
-
 		player.placeBet(house);
-
 		houseTurn(deck, &house, &player);
-
 
 		if(house.totalBlackJackValue > 21 ||
 				player.totalBlackJackValue > house.totalBlackJackValue) {
+			if(house.totalBlackJackValue > 21)
+				cout << "\nThe house busted";\
 			cout << "\nYou win";
 			player.cash += player.bet;
 			house.cash -= player.bet;
