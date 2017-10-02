@@ -29,6 +29,7 @@ public:
 	static void game(Card deck[]);
 	static void createDeck(Card deckCard[]);
 	static void printBoard(Player house, Player player);
+	static bool testForWinner(Player& house, Player& player);
 };
 
 #endif // GAME_H

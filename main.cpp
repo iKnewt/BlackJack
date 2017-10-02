@@ -20,11 +20,24 @@ int main() {
 			"The value of all face-cards is 10.\n\n" <<
 
 			"Good luck!\n\n\n";
-
 	Card deck[52];
 	Game::createDeck(deck);
 	Tool::pressToContinue();
-	Game::game(deck);
 
+	string yesNo = "y";
+
+	while(yesNo != "n") {
+		Game::game(deck);
+
+		while(true) {
+		cout << "\n\nWhould you like to play again [y/n]?";
+		yesNo = Tool::readLine();
+		yesNo = Tool::toLower(yesNo);
+		if(yesNo == "y")
+			break;
+		else
+			cout << "Invalid input.";
+		}
+	}
 	return 0;
 }
