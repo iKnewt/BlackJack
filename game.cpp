@@ -1,7 +1,7 @@
 #include "game.h"
 #include <time.h>
 #include <random>
-// I may have messed up everything
+
 
 static const string CARD_NAMES[] = { // constant variables used to print the cards
 	"Ace",
@@ -61,7 +61,7 @@ void Player::placeBet(const Player& otherPlayer) {
 void Player::printHand() { // prints a players hand to screen
 	cout << "\n\n\n" << " | " << name << " | " << cash << "$" << " | " << endl << endl;
 	for(int i = 0; i < cardsDrawn; i++) {
-		cout << " | " << CARD_NAMES[hand[i].rank] << " of " << SUIT_NAMES[hand[i].suit] << endl;
+		cout << " | " << CARD_NAMES[hand[i].rank - 1] << " of " << SUIT_NAMES[hand[i].suit] << endl;
 	}
 	cout << "\n Current total value: " << totalBlackJackValue;
 	cout << endl;
@@ -105,18 +105,18 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 	cout << "\nhouse turn\n";
 
 	do {
-		for(int i = 0; i > 10; i++) {
-			if(house->hand[i].rank == 1) { // if any cards
-				if (house->totalBlackJackValue + 11 >= 21) {
-					cout << "The house chose to value the Ace as 1";
-					house->totalBlackJackValue += 1;
-				}
-				else {
-					cout << "The house chose to value the Ace as 11";
-					house->totalBlackJackValue += 11;
-				}
-			}
-		}
+//		for(int i = 0; i > 10; i++) {
+//			if(house->hand[i].rank == 1) { // if any cards
+//				if (house->totalBlackJackValue + 11 >= 21) {
+//					cout << "The house chose to value the Ace as 1";
+//					house->totalBlackJackValue += 1;
+//				}
+//				else {
+//					cout << "The house chose to value the Ace as 11";
+//					house->totalBlackJackValue += 11;
+//				}
+//			}
+//		}
 
 
 		if(house->totalBlackJackValue > 21) { // runs if the house has gotten a higher value than 21 and breaks out of the loop if it has
@@ -151,7 +151,8 @@ bool playerTurn(Card deck[], Player* house, Player* player) {
 	do {
 		Game::printBoard(*house, *player);
 
-		cout << "\n\nWill you Hit, Stand or change the value of an Ace? ";
+//		cout << "\n\nWill you Hit, Stand or change the value of an Ace? ";
+		cout << "\n\nWill you Hit or Stand? ";
 		string playerChoice = Tool::readLine();
 		playerChoice = Tool::toLower(playerChoice);
 
@@ -178,34 +179,34 @@ bool playerTurn(Card deck[], Player* house, Player* player) {
 		}
 		else if(playerChoice == "stand")
 			break;
-		else if(playerChoice == "ace") {
+//		else if(playerChoice == "ace") {
 
-			for(int i = 0; i > player->hand.size(); i++) {
-				if(house->hand[i].rank == 1) {
-					int aceValue;
-					while (true) {
-						cout << "";
-						if (!Tool::tryReadInt(&aceValue))
-							cout << "\nThat's not a number\n";
-						else if(aceValue != 1 && aceValue != 11)
-							cout << "\nYou can't put that value\n";
-						else {
-							player->totalBlackJackValue += aceValue;
-							break;
-						}
-					}
-				}
-
-
-			}
+//			for(int i = 0; i > player->hand.size(); i++) {
+//				if(house->hand[i].rank == 1) {
+//					int aceValue;
+//					while (true) {
+//						cout << "";
+//						if (!Tool::tryReadInt(&aceValue))
+//							cout << "\nThat's not a number\n";
+//						else if(aceValue != 1 && aceValue != 11)
+//							cout << "\nYou can't put that value\n";
+//						else {
+//							player->totalBlackJackValue += aceValue;
+//							break;
+//						}
+//					}
+//				}
 
 
+//			}
 
 
-		}
+
+
+//		}
 		else
 			cout << "\nThat's not a valid move";
-	} while(player->totalBlackJackValue < 21);
+	} while(player->totalBlackJackValue <= 21);
 
 	if(player->totalBlackJackValue > 21) {
 		//player.printHand();
