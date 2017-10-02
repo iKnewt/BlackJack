@@ -1,6 +1,7 @@
 #include "game.h"
 #include <time.h>
 #include <random>
+// I may have messed up everything
 
 static const string CARD_NAMES[] = { // constant variables used to print the cards
 	"Ace",
