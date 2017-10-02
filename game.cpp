@@ -66,7 +66,7 @@ void Player::printHand() { // prints a players hand to screen
 	cout << endl;
 }
 
-void Game::printBoard(const Player& house, const Player& player) {
+void Game::printBoard(Player house, Player player) {
 	house.printHand();
 	cout << "\n\n\n";
 	player.printHand();
@@ -105,7 +105,7 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 
 	do {
 		for(int i = 0; i > 10; i++) {
-			if(hand[i].rank == 1) { // if any cards
+			if(house->hand[i].rank == 1) { // if any cards
 				if (house->totalBlackJackValue + 11 >= 21) {
 					cout << "The house chose to value the Ace as 1";
 					house->totalBlackJackValue += 1;
@@ -180,7 +180,7 @@ bool playerTurn(Card deck[], Player* house, Player* player) {
 		else if(playerChoice == "ace") {
 
 			for(int i = 0; i > player->hand.size(); i++) {
-				if(hand[i].rank == 1) {
+				if(house->hand[i].rank == 1) {
 					int aceValue;
 					while (true) {
 						cout << "";

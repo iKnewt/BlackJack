@@ -28,7 +28,7 @@ class Game {
 public:
 	static void game(Card deck[]);
 	static void createDeck(Card deckCard[]);
-	static void printBoard(const Player& house, const Player& player);
+	static void printBoard(Player house, Player player);
 };
 
 #endif // GAME_H

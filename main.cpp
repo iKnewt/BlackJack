@@ -23,10 +23,7 @@ int main() {
 
 	Card deck[52];
 	Game::createDeck(deck);
-
 	Tool::pressToContinue();
-
-
 	Game::game(deck);
 
 	return 0;
