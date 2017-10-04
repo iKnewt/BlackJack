@@ -141,20 +141,6 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 	cout << "\nhouse turn\n";
 
 	do {
-
-				for(int i = 0; i > 10; i++) {
-					if(house->hand[i].rank == 1) { // if any cards
-						if (house->totalBlackJackValue + 11 >= 21) {
-							cout << "The house chose to value the Ace as 1";
-						}
-						else {
-							cout << "The house chose to value the Ace as 11";
-							house->totalBlackJackValue += 11;
-						}
-					}
-				}
-
-
 		if(house->totalBlackJackValue > 21) { // runs if the house has gotten a higher value than 21 and breaks out of the loop if it has
 			cout << "\nThe house busted";
 			break;
@@ -166,13 +152,12 @@ void houseTurn(Card deck[], Player* house, Player* player) {
 		int handSize = house->hand.size();  // I didn't have the time to comment on and test this fully, but it should let the house decide if it should put the ace value as 1 or 11
 		for(int i = 0; i < handSize; i++) {
 			if(house->hand[i].rank == 1) {
-				int aceValue = 1;
-				if(house->totalBlackJackValue <= 10)
-					house->hand[i].blackjackValue = 11;
-				else
+				if(house->totalBlackJackValue > 21)
 					house->hand[i].blackjackValue = 1;
+				else
+					house->hand[i].blackjackValue = 11;
 
-				cout << "The house set the value of " << SUIT_NAMES[house->hand[i].suit] << " to be " << aceValue << endl;
+				cout << "The house set the value of the Ace of " << SUIT_NAMES[house->hand[i].suit] << " to " << house->hand[i].blackjackValue << endl;
 				house->sumBlackjackValue();
 			}
 		}
@@ -190,8 +175,10 @@ void playerHit(Card deck[], Player& player) {
 
 bool changeAce(Player& player) {
 	int handSize = player.hand.size();
+	bool hasAce = false;
 	for(int i = 0; i < handSize; i++) {
 		if(player.hand[i].rank == 1) {
+			hasAce = true;
 			int aceValue;
 			while (true) {
 				cout << "What value would you like the Ace of " << SUIT_NAMES[player.hand[i].suit] << " to be [1 or 11]?";
@@ -203,12 +190,10 @@ bool changeAce(Player& player) {
 					player.hand[i].blackjackValue = aceValue;
 				break;
 			}
-			return true;
 		}
 	}
-	return false;
+	return hasAce;
 }
-
 
 PlayerMove getPlayerMove() {
 	cout << "\n\n1. Hit"
@@ -245,8 +230,7 @@ bool playerTurn(Card deck[], Player* house, Player* player) {
 		while(player->totalBlackJackValue > 21) { // runs as long as the player has busted
 			Game::printBoard(*house, *player);
 
-			if (player->totalBlackJackValue -10 <= 21 && // runs if there is a possibility changing an ace could help you not bust by changing it from 11 to 1
-					changeAce(*player)){ // forces the player to look at their aces, this isn't fully implemented yet as I ran out of time
+			if (player->totalBlackJackValue -10 <= 21 && changeAce(*player)) { // runs if there is a possibility changing an ace could help you not bust by changing it from 11 to 1
 				player->sumBlackjackValue();
 				continue;
 			}
